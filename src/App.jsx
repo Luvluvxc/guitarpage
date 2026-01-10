@@ -11,7 +11,14 @@ function App() {
 	//verificar 
 	function addToCart(item) {
 		const itemExists = cart.findIndex((guitar) => guitar.id == item.id)
-		setCart(prevCart => [...prevCart, item])
+		if (itemExists >= 0) {
+			const updateCart = [...cart]
+			updatedCart[itemExists].quantity++
+			setCart(updateCart)
+		} else {
+			setCart([...cart, { ...item, quantity: 1 }])
+		}
+		
 	}
  
 

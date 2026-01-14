@@ -1,4 +1,4 @@
-import Header from "./components/Header";
+import Header from "./components/Header"
 import Guitar from "./components/Guitar"
 import { useState } from 'react'
 import { db } from "./data/db";
@@ -10,21 +10,54 @@ function App() {
 
 	//verificar 
 	function addToCart(item) {
-		const itemExists = cart.findIndex((guitar) => guitar.id == item.id)
+		const itemExists = cart.findIndex((guitar) => guitar.id === item.id)
 		if (itemExists >= 0) {
-			const updateCart = [...cart]
-			updatedCart[itemExists].quantity++
+			const updateCart = [...cart];
+			updateCart[itemExists].quantity++;
 			setCart(updateCart)
 		} else {
 			setCart([...cart, { ...item, quantity: 1 }])
 		}
 		
 	}
+
+	function removeFromCart(id) {
+		setCart(prevCart => prevCart.filter(guitar => guitar.id !== id))	
+	}
+
+	function increaseQuantity(id) {
+		setCart(prevCart => prevCart.map(item =>
+			item.id === id && item.quantity < 5 ?
+			//...item = “todo igual, excepto lo que cambie después”.
+				{ ...item, quantity: item.quantity + 1}
+				: item
+		)
+		);
+			
+	}
+
+
+	function decreaseQuantity(id) {
+  setCart(prevCart =>
+    prevCart.map(item =>
+        item.id === id
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+      .filter(item => item.quantity > 0)
+  );
+}
+ 
  
 
   return (
     <>
-      <Header />
+			<Header
+				cart={cart}
+				removeFromCart={removeFromCart}
+				increaseQuantity={increaseQuantity}
+				decreaseQuantity={decreaseQuantity}
+			/>
 
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
@@ -34,7 +67,7 @@ function App() {
 						<Guitar
 							key={guitar.id}
 							guitar={guitar}
-							setCart={setCart}
+							addToCart={addToCart}
 						/>
 					)
 					)}

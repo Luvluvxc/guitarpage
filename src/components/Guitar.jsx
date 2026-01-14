@@ -1,7 +1,7 @@
 import React from "react";
 
 
-function Guitar({guitar, setCart}) {
+function Guitar({guitar , addToCart}) {
 	
 	const { id, name, image, description, price } = guitar
 	
